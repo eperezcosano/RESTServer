@@ -22,8 +22,9 @@ public interface TracksManager {
      * @param singer track singer
      * @param idAlbum album identifier
      * @throws AlbumNotFoundException if album does not exist
+     * @return track identifier
      */
-    void addTrack(String title, String singer, String idAlbum) throws AlbumNotFoundException;
+    String addTrack(String title, String singer, String idAlbum) throws AlbumNotFoundException;
 
     /**
      * Get a track by id
@@ -92,4 +93,9 @@ public interface TracksManager {
      * @return number of albums
      */
     int numAlbums();
+
+    /**
+     * Clear data structures
+     */
+    void clear();
 }

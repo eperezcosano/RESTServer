@@ -40,12 +40,13 @@ public class TracksManagerImpl implements TracksManager {
     }
 
     @Override
-    public void addTrack(String title, String singer, String idAlbum) throws AlbumNotFoundException {
+    public String addTrack(String title, String singer, String idAlbum) throws AlbumNotFoundException {
         Album album = this.getAlbum(idAlbum);
         Track track = new Track(title, singer);
         album.addTrack(track);
         this.tracks.put(track.getId(), track);
         logger.info("Track added");
+        return track.getId();
     }
 
     @Override
@@ -110,5 +111,11 @@ public class TracksManagerImpl implements TracksManager {
     public int numAlbums() {
         logger.info("Number of albums: " + this.albums.size());
         return this.albums.size();
+    }
+
+    @Override
+    public void clear() {
+        this.albums = new HashMap<>();
+        this.tracks = new HashMap<>();
     }
 }
