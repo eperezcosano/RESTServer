@@ -123,6 +123,23 @@ public class TracksService {
         }
     }
 
+    @DELETE
+    @ApiOperation(value = "delete an Album")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful"),
+            @ApiResponse(code = 404, message = "Album not found")
+    })
+    @Path("/albums/{id}")
+    public Response deleteAlbum(@PathParam("id") String id) {
+        try {
+            this.tm.deleteAlbum(id);
+            return Response.status(201).build();
+        } catch (AlbumNotFoundException e) {
+            e.printStackTrace();
+            return Response.status(404).build();
+        }
+    }
+
     @PUT
     @ApiOperation(value = "update a Track")
     @ApiResponses(value = {
