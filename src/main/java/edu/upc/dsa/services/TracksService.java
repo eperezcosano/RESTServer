@@ -18,8 +18,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-@Api(value = "/tracks", description = "Endpoint to Track Service")
-@Path("/tracks")
+@Api(value = "/trackService", description = "Endpoint to Track Service")
+@Path("/")
 public class TracksService {
 
     private TracksManager tm;
@@ -47,7 +47,7 @@ public class TracksService {
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response = Track.class, responseContainer="List"),
     })
-    @Path("/")
+    @Path("/tracks")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTracks() {
         List<Track> tracks = this.tm.getTracks();
@@ -74,7 +74,7 @@ public class TracksService {
             @ApiResponse(code = 201, message = "Successful", response = Track.class),
             @ApiResponse(code = 404, message = "Track not found")
     })
-    @Path("/{id}")
+    @Path("/tracks/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTrack(@PathParam("id") String id) {
         try {
@@ -112,7 +112,7 @@ public class TracksService {
             @ApiResponse(code = 201, message = "Successful"),
             @ApiResponse(code = 404, message = "Track not found")
     })
-    @Path("/{id}")
+    @Path("/tracks/{id}")
     public Response deleteTrack(@PathParam("id") String id) {
         try {
             this.tm.deleteTrack(id);
@@ -146,7 +146,7 @@ public class TracksService {
             @ApiResponse(code = 201, message = "Successful"),
             @ApiResponse(code = 404, message = "Track not found")
     })
-    @Path("/")
+    @Path("/tracks")
     public Response updateTrack(Track track) {
         try {
             this.tm.updateTrack(track);
@@ -181,7 +181,7 @@ public class TracksService {
             @ApiResponse(code = 404, message = "Album not found"),
             @ApiResponse(code = 500, message = "Validation Error")
     })
-    @Path("/{idAlbum}")
+    @Path("/tracks/{idAlbum}")
     public Response newTrack(Track track, @PathParam("idAlbum") String idAlbum) {
 
         if (track.getTitle() == null || track.getSinger() == null || idAlbum == null) return Response.status(500).build();
