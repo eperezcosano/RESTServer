@@ -87,6 +87,25 @@ public class TracksService {
         }
     }
 
+    @GET
+    @ApiOperation(value = "get an Album")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful", response = Album.class),
+            @ApiResponse(code = 404, message = "Album not found")
+    })
+    @Path("/albums/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAlbum(@PathParam("id") String id) {
+        try {
+            Album album = this.tm.getAlbum(id);
+            GenericEntity<Album> entity = new GenericEntity<Album>(album) {};
+            return Response.status(201).entity(entity).build();
+        } catch (AlbumNotFoundException e) {
+            e.printStackTrace();
+            return Response.status(404).build();
+        }
+    }
+
     @DELETE
     @ApiOperation(value = "delete a Track")
     @ApiResponses(value = {
