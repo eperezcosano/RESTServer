@@ -157,6 +157,23 @@ public class TracksService {
         }
     }
 
+    @PUT
+    @ApiOperation(value = "update an Album")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful"),
+            @ApiResponse(code = 404, message = "Album not found")
+    })
+    @Path("/")
+    public Response updateTrack(Album album) {
+        try {
+            this.tm.updateAlbum(album);
+            return Response.status(201).build();
+        } catch (AlbumNotFoundException e) {
+            e.printStackTrace();
+            return Response.status(404).build();
+        }
+    }
+
     @POST
     @ApiOperation(value = "create a new Track")
     @ApiResponses(value = {
