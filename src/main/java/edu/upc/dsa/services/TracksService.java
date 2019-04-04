@@ -163,7 +163,7 @@ public class TracksService {
             @ApiResponse(code = 201, message = "Successful"),
             @ApiResponse(code = 404, message = "Album not found")
     })
-    @Path("/")
+    @Path("/albums")
     public Response updateTrack(Album album) {
         try {
             this.tm.updateAlbum(album);
@@ -194,4 +194,17 @@ public class TracksService {
         }
     }
 
+    @POST
+    @ApiOperation(value = "create a new Album")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successful"),
+            @ApiResponse(code = 500, message = "Validation Error")
+    })
+    @Path("/albums")
+    public Response newAlbum(Album album) {
+
+        if (album.getName() == null || album.getSinger() == null || album.getYear() == 0) return Response.status(500).build();
+        this.tm.addAlbum(album.getName(), album.getSinger(), album.getYear());
+        return Response.status(200).build();
+    }
 }
