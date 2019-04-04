@@ -5,6 +5,7 @@ import edu.upc.dsa.AlbumNotFoundException;
 import edu.upc.dsa.TrackNotFoundException;
 import edu.upc.dsa.TracksManager;
 import edu.upc.dsa.TracksManagerImpl;
+import edu.upc.dsa.models.Album;
 import edu.upc.dsa.models.Track;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -51,6 +52,19 @@ public class TracksService {
     public Response getTracks() {
         List<Track> tracks = this.tm.getTracks();
         GenericEntity<List<Track>> entity = new GenericEntity<List<Track>>(tracks) {};
+        return Response.status(201).entity(entity).build()  ;
+    }
+
+    @GET
+    @ApiOperation(value = "get all albums")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful", response = Album.class, responseContainer="List"),
+    })
+    @Path("/albums")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAlbums() {
+        List<Album> albums = this.tm.getAlbums();
+        GenericEntity<List<Album>> entity = new GenericEntity<List<Album>>(albums) {};
         return Response.status(201).entity(entity).build()  ;
     }
 
