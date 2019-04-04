@@ -1,6 +1,7 @@
 package edu.upc.dsa;
 
 import edu.upc.dsa.models.Album;
+import edu.upc.dsa.models.Author;
 import edu.upc.dsa.models.Track;
 import org.apache.log4j.Logger;
 
@@ -15,6 +16,7 @@ public class TracksManagerImpl implements TracksManager {
 
     //Facade
     private static TracksManager instance;
+    private HashMap<String, Author> authors;
     private HashMap<String, Album> albums;
     private HashMap<String, Track> tracks;
 
@@ -30,19 +32,31 @@ public class TracksManagerImpl implements TracksManager {
         return instance;
     }
 
+    @Override
+    public String addAuthor(String name) {
+        Author author = new Author(name);
+        this.authors.put(author.getId(), author);
+        logger.info("Author added");
+        return author.getId();
+    }
+
     //Methods
     @Override
-    public String addAlbum(String name, String singer, int year) {
+    public String addAlbum(String name, String singer, int year, String idAuthor) throws AuthorNotFoundException {
+        Author author = this.getAuthor(idAuthor);
         Album album = new Album(name, singer, year);
+        author.addAlbum(album);
         this.albums.put(album.getId(), album);
         logger.info("Album added");
         return album.getId();
     }
 
     @Override
-    public String addTrack(String title, String singer, String idAlbum) throws AlbumNotFoundException {
+    public String addTrack(String title, String singer, String idAlbum, String idAuthor) throws AuthorNotFoundException, AlbumNotFoundException {
+        Author author = this.getAuthor(idAuthor);
         Album album = this.getAlbum(idAlbum);
         Track track = new Track(title, singer);
+        author.addTrack(track);
         album.addTrack(track);
         this.tracks.put(track.getId(), track);
         logger.info("Track added");
@@ -64,6 +78,13 @@ public class TracksManagerImpl implements TracksManager {
     }
 
     @Override
+    public Author getAuthor(String id) throws AuthorNotFoundException {
+        Author author = this.authors.get(id);
+        if (author != null) return author;
+        else throw new AuthorNotFoundException();
+    }
+
+    @Override
     public List<Track> getTracks() {
         return new ArrayList<>(this.tracks.values());
     }
@@ -71,6 +92,11 @@ public class TracksManagerImpl implements TracksManager {
     @Override
     public List<Album> getAlbums() {
         return new ArrayList<>(this.albums.values());
+    }
+
+    @Override
+    public List<Author> gerAuthors() {
+        return new ArrayList<>(this.authors.values());
     }
 
     @Override
@@ -88,6 +114,13 @@ public class TracksManagerImpl implements TracksManager {
     }
 
     @Override
+    public void updateAuthor(Author author) throws AuthorNotFoundException {
+        this.getAuthor(author.getId());
+        this.authors.put(author.getId(), author);
+        logger.info("Author updated");
+    }
+
+    @Override
     public void deleteTrack(String id) throws TrackNotFoundException {
         this.getTrack(id);
         this.tracks.remove(id);
@@ -99,6 +132,13 @@ public class TracksManagerImpl implements TracksManager {
         this.getAlbum(id);
         this.albums.remove(id);
         logger.info("Album deleted");
+    }
+
+    @Override
+    public void deleteAuthor(String id) throws AuthorNotFoundException {
+        this.getAuthor(id);
+        this.authors.remove(id);
+        logger.info("Author deleted");
     }
 
     @Override
@@ -114,8 +154,15 @@ public class TracksManagerImpl implements TracksManager {
     }
 
     @Override
+    public int numAuthors() {
+        logger.info("Number of authors: " + this.authors.size());
+        return this.authors.size();
+    }
+
+    @Override
     public void clear() {
         this.albums = new HashMap<>();
         this.tracks = new HashMap<>();
+        this.authors = new HashMap<>();
     }
 }

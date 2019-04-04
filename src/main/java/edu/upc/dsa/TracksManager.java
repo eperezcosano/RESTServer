@@ -1,6 +1,7 @@
 package edu.upc.dsa;
 
 import edu.upc.dsa.models.Album;
+import edu.upc.dsa.models.Author;
 import edu.upc.dsa.models.Track;
 
 import java.util.List;
@@ -10,27 +11,32 @@ public interface TracksManager {
     /**
      * Add a new edu.upc.dsa.models.Author
      * @param name author name
+     * @return author identifier
      */
-    void addAuthor(String name);
+    String addAuthor(String name);
 
     /**
      * Add a new edu.upc.dsa.models.Album
      * @param name album name
      * @param singer album singer
      * @param year album year
+     * @param idAuthor author identifier
+     * @throws AuthorNotFoundException if author does not exist
      * @return album identifier
      */
-    String addAlbum(String name, String singer, int year);
+    String addAlbum(String name, String singer, int year, String idAuthor) throws AuthorNotFoundException;
 
     /**
      * Add a new edu.upc.dsa.models.Track
      * @param title track title
      * @param singer track singer
      * @param idAlbum album identifier
+     * @param idAuthor author identifier
      * @throws AlbumNotFoundException if album does not exist
+     * @throws AuthorNotFoundException if author does not exist
      * @return track identifier
      */
-    String addTrack(String title, String singer, String idAlbum) throws AlbumNotFoundException;
+    String addTrack(String title, String singer, String idAlbum, String idAuthor) throws AuthorNotFoundException, AlbumNotFoundException;
 
     /**
      * Get a track by id
@@ -49,6 +55,14 @@ public interface TracksManager {
     Album getAlbum(String id) throws AlbumNotFoundException;
 
     /**
+     * Get an author by id
+     * @param id author identifier
+     * @return author object
+     * @throws AuthorNotFoundException if author does not exist
+     */
+    Author getAuthor(String id) throws AuthorNotFoundException;
+
+    /**
      * Get all tracks
      * @return list of tracks
      */
@@ -59,6 +73,12 @@ public interface TracksManager {
      * @return list of albums
      */
     List<Album> getAlbums();
+
+    /**
+     * Get all authors
+     * @return list of authors
+     */
+    List<Author> gerAuthors();
 
     /**
      * Update a track
@@ -75,6 +95,13 @@ public interface TracksManager {
     void updateAlbum(Album album) throws AlbumNotFoundException;
 
     /**
+     * Update an author
+     * @param author author object
+     * @throws AuthorNotFoundException if author does not exist
+     */
+    void updateAuthor(Author author) throws AuthorNotFoundException;
+
+    /**
      * Delete a track by id
      * @param id track identifier
      * @throws TrackNotFoundException if track does not exist
@@ -89,6 +116,13 @@ public interface TracksManager {
     void deleteAlbum(String id) throws AlbumNotFoundException;
 
     /**
+     * Delete an author by id
+     * @param id author identifier
+     * @throws AuthorNotFoundException if author does not exist
+     */
+    void deleteAuthor(String id) throws AuthorNotFoundException;
+
+    /**
      * Get the number of tracks
      * @return number of tracks
      */
@@ -99,6 +133,12 @@ public interface TracksManager {
      * @return number of albums
      */
     int numAlbums();
+
+    /**
+     * Get the number of authors
+     * @return number of authors
+     */
+    int numAuthors();
 
     /**
      * Clear data structures
