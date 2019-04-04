@@ -8,6 +8,12 @@ import java.util.List;
 public interface TracksManager {
 
     /**
+     * Add a new edu.upc.dsa.models.Author
+     * @param name author name
+     */
+    void addAuthor(String name);
+
+    /**
      * Add a new edu.upc.dsa.models.Album
      * @param name album name
      * @param singer album singer
